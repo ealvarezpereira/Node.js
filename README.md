@@ -8,14 +8,16 @@ Tutorial de como añadir notificaciones de firebase a Node.js
 2.- En la consola de firebase, vamos a herramientas del proyecto, y en la pestaña de servicio
 seleccionamos Node.js y copiamos este código.
 
-var admin = require("firebase-admin");
+function codigo(){
+  var admin = require("firebase-admin");
 
-var serviceAccount = require("path/to/serviceAccountKey.json");
+  var serviceAccount = require("path/to/serviceAccountKey.json");
 
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-  databaseURL: "https://fir-nodejs-55aca.firebaseio.com"
-});
+  admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+    databaseURL: "https://fir-nodejs-55aca.firebaseio.com"
+  });
+}
 
 3.- Hacemos clic en Generar nueva clave privada y descargamos el archivo .json
 
@@ -35,22 +37,24 @@ refj.once("value",function(snapshot){
 
 7.- Creamos la variable topico y mensaje donde especificamos lo que queremos enviar
 
-var topic = 'topico';
-        var message = {
-          notification: {
-            title: 'titulo',
-            body: 'mensaje'
-          },
-          topic: topic
-        };
+function codigo(){
 
-        // Se envía el mensaje a los usuarios registrados en el tópico
-        admin.messaging().send(message)
-          .then((response) => {
-            // Response is a message ID string.
-            console.log('Successfully sent message:', response);
-          })
-          .catch((error) => {
-            console.log('Error sending message:', error);
-        });
+  var topic = 'topico';
+          var message = {
+            notification: {
+              title: 'titulo',
+              body: 'mensaje'
+            },
+            topic: topic
+          };
 
+          // Se envía el mensaje a los usuarios registrados en el tópico
+          admin.messaging().send(message)
+            .then((response) => {
+              // Response is a message ID string.
+              console.log('Successfully sent message:', response);
+            })
+            .catch((error) => {
+              console.log('Error sending message:', error);
+          });
+}
