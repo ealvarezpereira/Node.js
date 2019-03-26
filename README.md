@@ -8,7 +8,7 @@ Tutorial de como añadir notificaciones de firebase a Node.js
 2.- En la consola de firebase, vamos a herramientas del proyecto, y en la pestaña de servicio
 seleccionamos Node.js y copiamos este código.
 
-//Codigo
+```
   var admin = require("firebase-admin");
 
   var serviceAccount = require("path/to/serviceAccountKey.json");
@@ -17,6 +17,7 @@ seleccionamos Node.js y copiamos este código.
     credential: admin.credential.cert(serviceAccount),
     databaseURL: "https://fir-nodejs-55aca.firebaseio.com"
   });
+```
 
 3.- Hacemos clic en Generar nueva clave privada y descargamos el archivo .json
 
@@ -27,16 +28,18 @@ introducimos la ruta del json que previamente tenemos que subir al servidor.
 
 6.- Añadimos al cliente a ese tópico
 
+```
 refj.once("value",function(snapshot){
     snapshot.forEach(function(snap){
         tjugadores.push(snap.val().token);
         admin.messaging().subscribeToTopic(snap.val().token, 'topico');
     });
 });
+```
 
 7.- Creamos la variable topico y mensaje donde especificamos lo que queremos enviar
 
-// Código
+```
   var topic = 'topico';
           var message = {
             notification: {
@@ -55,3 +58,4 @@ refj.once("value",function(snapshot){
             .catch((error) => {
               console.log('Error sending message:', error);
           });
+```
