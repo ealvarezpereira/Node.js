@@ -15,16 +15,22 @@ admin.initializeApp({
 });
 
 var db = admin.database();
+// Referencia a la tabla jugadores de firebase
 var refj = db.ref("/jugadores");
+// Referencia a la tabla puntuacion de firebase
 var refScore = db.ref("/puntuacion");
+// Mapa que albergará los scores
 var mapScore = new Map();
+// Resultado de las puntuaciones
 var resultado = null;
+// Puntuacion de los jugadores
 var score = 0;
+// Lista de jugadores
 var tjugadores = [];
 var clave;
 var obj;
 
-
+// Por cada token de jugador ponemos en el mapScore su valor
 refScore.once("value",function(snapshot){
     snapshot.forEach(function (snap) {
         mapScore.set(snap.key,snap.val());
@@ -33,7 +39,7 @@ refScore.once("value",function(snapshot){
     
 });
 
-
+// Añadimos los jugadores al topic para enviarles las notificaciones
 refj.once("value",function(snapshot){
     snapshot.forEach(function(snap){
         tjugadores.push(snap.val().token);
@@ -41,13 +47,16 @@ refj.once("value",function(snapshot){
     });
 });
 
-
+//Cuando se modifica una respuesta se dispara el metodo on
 refj.on("child_changed", function(snapshot) {
     //nombre del child
     console.log("key: " + snapshot.key);
    
     //valores del child
     console.log("respuesta: " + snapshot.val().respuesta);
+    
+    //Si la respuesta es correcta se añade +1 al score y se modifica la tabla
+    // en firebase, si es falsa se escribe el score sin sumarle +1
     if(snapshot.val().respuesta=="true"){
         if(mapScore.has(snapshot.key)){
             mapScore.set(snapshot.key,mapScore.get(snapshot.key)+1);
@@ -66,6 +75,9 @@ refj.on("child_changed", function(snapshot) {
             obj[clave] = score;
             refScore.update(obj);
         }
+        
+    // Si acaba un jugador se especifica el tópico, y el mensaje que se va a enviar
+    // como notificación a los jugadores
     }else if (snapshot.val().acabo == "true"){
         
         var topic = 'jugadores';
@@ -77,7 +89,7 @@ refj.on("child_changed", function(snapshot) {
           topic: topic
         };
 
-        // Send a message to devices subscribed to the provided topic.
+        // Se envía el mensaje a los usuarios registrados en el tópico
         admin.messaging().send(message)
           .then((response) => {
             // Response is a message ID string.
