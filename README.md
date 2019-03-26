@@ -8,7 +8,7 @@ Tutorial de como añadir notificaciones de firebase a Node.js
 2.- En la consola de firebase, vamos a herramientas del proyecto, y en la pestaña de servicio
 seleccionamos Node.js y copiamos este código.
 
-function codigo(){
+//Codigo
   var admin = require("firebase-admin");
 
   var serviceAccount = require("path/to/serviceAccountKey.json");
@@ -17,7 +17,6 @@ function codigo(){
     credential: admin.credential.cert(serviceAccount),
     databaseURL: "https://fir-nodejs-55aca.firebaseio.com"
   });
-}
 
 3.- Hacemos clic en Generar nueva clave privada y descargamos el archivo .json
 
@@ -37,8 +36,7 @@ refj.once("value",function(snapshot){
 
 7.- Creamos la variable topico y mensaje donde especificamos lo que queremos enviar
 
-function codigo(){
-
+// Código
   var topic = 'topico';
           var message = {
             notification: {
@@ -57,4 +55,3 @@ function codigo(){
             .catch((error) => {
               console.log('Error sending message:', error);
           });
-}
